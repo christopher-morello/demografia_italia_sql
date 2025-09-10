@@ -5,7 +5,7 @@ L’obiettivo di questa analisi è esaminare la distribuzione della popolazione 
 
 ## Dataset
 - **Fonte**: [Demo Istat](https://demo.istat.it/)
-  - Il dataset è stato interamente caricato tramite queries per rendere l'analisi immediatamente riproducibile, senza necessità di scaricare il dataset.
+  - Il dataset è stato interamente caricato tramite queries per rendere l'analisi immediatamente riproducibile.
 - **Periodo**: 10-09-2025
 - **Tabelle principali**: residenti italiani, residenti stranieri.
 
