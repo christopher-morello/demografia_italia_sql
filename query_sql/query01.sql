@@ -3,7 +3,6 @@ CREATE DATABASE IF NOT EXISTS demo;
 USE demo;
 
 -- Creazione tabella italiani residenti
--- Age è ora un tipo di dato numerico (INT)
 CREATE TABLE italiani (
     Age INT PRIMARY KEY,
     maschi_i INT,
@@ -12,7 +11,6 @@ CREATE TABLE italiani (
 );
 
 -- Creazione tabella stranieri residenti
--- Age è ora un tipo di dato numerico (INT)
 CREATE TABLE stranieri (
     Age INT PRIMARY KEY,
     maschi_s INT,
@@ -21,8 +19,6 @@ CREATE TABLE stranieri (
 );
 
 -- Inserimento dei dati nella tabella "italiani"
--- Ho corretto l'uso dei nomi di colonna. I dati per gli italiani vanno
--- nelle colonne maschi_i, femmine_i e totale_italiani
 INSERT INTO italiani (Age, maschi_i, femmine_i, totale_italiani) VALUES
 (0,191699,180842,372541),
 (1,197202,185658,382860),
@@ -128,8 +124,6 @@ INSERT INTO italiani (Age, maschi_i, femmine_i, totale_italiani) VALUES
 
 
 -- Inserimento dei dati nella tabella "stranieri"
--- Ho corretto l'uso dei nomi di colonna. I dati per gli stranieri vanno
--- nelle colonne maschi_s, femmine_s e totale_stranieri
 INSERT INTO stranieri (Age, maschi_s, femmine_s, totale_stranieri) VALUES
 (0,26433,24584,51017),
 (1,26437,24638,51075),
@@ -342,7 +336,6 @@ FROM demo.residenti
 GROUP BY generazione;   
 
 -- Confronto popolazione femminile e maschile giovani, tra i 0 e 28 anni
--- Ho corretto il denominatore per calcolare la percentuale solo sul totale dei giovani
 SELECT
     'Giovani (0-28 anni)' AS categoria,
     ROUND(SUM(femmine_i + femmine_s) / SUM(maschi_i + maschi_s + femmine_i + femmine_s) * 100, 2) AS percentuale_femmine,
