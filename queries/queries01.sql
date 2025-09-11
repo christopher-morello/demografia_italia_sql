@@ -1,7 +1,6 @@
 -- Creazione del database
 CREATE DATABASE IF NOT EXISTS demo;
 
-
 USE demo;
 
 -- Creazione tabella italiani residenti
@@ -176,6 +175,7 @@ INSERT INTO stranieri (Age, maschi_s, femmine_s, totale_s) VALUES
 (46,52806,53528,106334),
 (47,50171,52526,102697),
 (48,47857,51425,99282),
+(49,46193,50256,96449),
 (50,43060,48619,91679),
 (51,39325,46090,85415),
 (52,38851,45981,84832),
@@ -187,6 +187,7 @@ INSERT INTO stranieri (Age, maschi_s, femmine_s, totale_s) VALUES
 (58,25045,34750,59795),
 (59,23559,33378,56937),
 (60,21977,33239,55216),
+(61,19924,32097,52021),
 (62,18700,30919,49619),
 (63,16126,29093,45219),
 (64,15908,28613,44521),
@@ -199,6 +200,7 @@ INSERT INTO stranieri (Age, maschi_s, femmine_s, totale_s) VALUES
 (71,6603,13397,20000),
 (72,6027,12186,18213),
 (73,5270,10338,15608),
+(74,5078,9796,14874),
 (75,4377,8421,12798),
 (76,3861,7266,11127),
 (77,3333,6046,9379),
@@ -210,6 +212,7 @@ INSERT INTO stranieri (Age, maschi_s, femmine_s, totale_s) VALUES
 (83,1369,2515,3884),
 (84,1446,2597,4043),
 (85,1066,2008,3074),
+(86,976,1799,2775),
 (87,819,1426,2245),
 (88,641,1158,1799),
 (89,550,928,1478),
@@ -225,14 +228,18 @@ INSERT INTO stranieri (Age, maschi_s, femmine_s, totale_s) VALUES
 (99,45,99,144),
 (100,92,201,293);
 
--- Creazione tabella residenti solo italiani
--- Tramite sottrazione delle colonne di stranieri in residenti_totali
+-- Disabilito Safe Mode
+SET SQL_SAFE_UPDATES = 0;
+
+-- Update tabella residenti con solo residenti italiani
+-- Tramite sottrazione delle colonne in stranieri da residenti_totali
 UPDATE residenti_totali as residenti_italiani
 JOIN stranieri ON residenti_italiani.Age = stranieri.Age
 SET 
   residenti_italiani.maschi = residenti_italiani.maschi - stranieri.maschi_s,
   residenti_italiani.femmine = residenti_italiani.femmine - stranieri.femmine_s,
   residenti_italiani.totale = residenti_italiani.totale - stranieri.totale_s;
+  
   
 -- Rinominare tabella e colonne della tabella con solo residenti italiani
 
@@ -262,10 +269,15 @@ INNER JOIN
 ON
     ita.Age = stranieri.Age;
     
-
 --  Controllo
 SELECT *
 FROM demo.residenti;
+
+-- Totale residenti italiani
+SELECT SUM(totale_i) FROM residenti;
+
+-- Totale residenti stranieri
+SELECT SUM(totale_s) FROM residenti;
 
 -- Le prime 10 fasce di età con più maschi italiani residenti
 SELECT Age, maschi_i
@@ -294,9 +306,6 @@ LIMIT 10;
 -- Creazione colonna con categorie generazionali
 ALTER TABLE demo.residenti
 ADD COLUMN generazione VARCHAR(50);
-
--- Disabilito Safe Mode
-SET SQL_SAFE_UPDATES = 0;
 
 -- Popolo la colonna generazione
 UPDATE demo.residenti 
@@ -365,3 +374,7 @@ FROM
     demo.residenti
 WHERE
     generazione IN ('Generazione Alpha (0-15 anni)','Generazione Z (16-28 anni)');
+    
+SELECT 
+    SUM(totale_s)
+FROM demo.residenti;
