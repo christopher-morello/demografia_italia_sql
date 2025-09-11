@@ -1,13 +1,15 @@
 -- Creazione del database
 CREATE DATABASE IF NOT EXISTS demo;
+
+
 USE demo;
 
 -- Creazione tabella italiani residenti
-CREATE TABLE italiani (
+CREATE TABLE residenti_totali (
     Age INT PRIMARY KEY,
-    maschi_i INT,
-    femmine_i INT,
-    totale_italiani INT
+    maschi INT,
+    femmine INT,
+    totale INT
 );
 
 -- Creazione tabella stranieri residenti
@@ -15,11 +17,11 @@ CREATE TABLE stranieri (
     Age INT PRIMARY KEY,
     maschi_s INT,
     femmine_s INT,
-    totale_stranieri INT
+    totale_s INT
 );
 
 -- Inserimento dei dati nella tabella "italiani"
-INSERT INTO italiani (Age, maschi_i, femmine_i, totale_italiani) VALUES
+INSERT INTO residenti_totali (Age, maschi, femmine, totale) VALUES
 (0,191699,180842,372541),
 (1,197202,185658,382860),
 (2,206462,193319,399781),
@@ -124,7 +126,7 @@ INSERT INTO italiani (Age, maschi_i, femmine_i, totale_italiani) VALUES
 
 
 -- Inserimento dei dati nella tabella "stranieri"
-INSERT INTO stranieri (Age, maschi_s, femmine_s, totale_stranieri) VALUES
+INSERT INTO stranieri (Age, maschi_s, femmine_s, totale_s) VALUES
 (0,26433,24584,51017),
 (1,26437,24638,51075),
 (2,27117,25037,52154),
@@ -223,17 +225,36 @@ INSERT INTO stranieri (Age, maschi_s, femmine_s, totale_stranieri) VALUES
 (99,45,99,144),
 (100,92,201,293);
 
+-- Creazione tabella residenti solo italiani
+-- Tramite sottrazione delle colonne di stranieri in residenti_totali
+UPDATE residenti_totali as residenti_italiani
+JOIN stranieri ON residenti_italiani.Age = stranieri.Age
+SET 
+  residenti_italiani.maschi = residenti_italiani.maschi - stranieri.maschi_s,
+  residenti_italiani.femmine = residenti_italiani.femmine - stranieri.femmine_s,
+  residenti_italiani.totale = residenti_italiani.totale - stranieri.totale_s;
+  
+-- Rinominare tabella e colonne della tabella con solo residenti italiani
+
+ALTER TABLE residenti_totali
+CHANGE COLUMN maschi maschi_i INT,
+CHANGE COLUMN femmine femmine_i INT,
+CHANGE COLUMN totale totale_i INT;
+
+RENAME TABLE residenti_totali TO italiani;
+
 
 -- creazione nuova tabella "residenti" dall' unione di "italiani" & "stranieri"
+
 CREATE TABLE residenti AS
 SELECT
-    ita.Age,  
+    ita.Age,
     ita.maschi_i,
     ita.femmine_i,
-    ita.totale_italiani,
+    ita.totale_i,
     stranieri.maschi_s,
     stranieri.femmine_s,
-    stranieri.totale_stranieri
+    stranieri.totale_s
 FROM
     demo.italiani AS ita
 INNER JOIN
@@ -309,15 +330,15 @@ ORDER BY n_femmine DESC;
 
 -- Confronto popolazione italiana e straniera residente per generazione
 SELECT generazione,
-    ROUND(SUM(femmine_i + maschi_i)/SUM(totale_italiani + totale_stranieri) * 100,2) AS percentuale_italiani,
-    ROUND(SUM(femmine_s + maschi_s)/SUM(totale_italiani + totale_stranieri) * 100,2) AS percentuale_stranieri
+    ROUND(SUM(femmine_i + maschi_i)/SUM(totale_i + totale_s) * 100,2) AS percentuale_italiani,
+    ROUND(SUM(femmine_s + maschi_s)/SUM(totale_i + totale_s) * 100,2) AS percentuale_stranieri
 FROM demo.residenti
 GROUP BY generazione;   
 
 -- Confronto popolazione femminile e maschile residente per generazione, stranieri e italiani
 SELECT generazione,
-    ROUND(SUM(femmine_i + femmine_s)/SUM(totale_italiani + totale_stranieri) * 100,2) AS percentuale_femmine,
-    ROUND(SUM(maschi_i + maschi_s)/SUM(totale_italiani + totale_stranieri) * 100,2) AS percentuale_maschi
+    ROUND(SUM(femmine_i + femmine_s)/SUM(totale_i + totale_s) * 100,2) AS percentuale_femmine,
+    ROUND(SUM(maschi_i + maschi_s)/SUM(totale_i + totale_s) * 100,2) AS percentuale_maschi
 FROM demo.residenti
 GROUP BY generazione;   
 
@@ -338,8 +359,8 @@ GROUP BY generazione;
 -- Confronto popolazione femminile e maschile giovani, tra i 0 e 28 anni
 SELECT
     'Giovani (0-28 anni)' AS categoria,
-    ROUND(SUM(femmine_i + femmine_s) / SUM(maschi_i + maschi_s + femmine_i + femmine_s) * 100, 2) AS percentuale_femmine,
-    ROUND(SUM(maschi_i + maschi_s) / SUM(maschi_i + maschi_s + femmine_i + femmine_s) * 100, 2) AS percentuale_maschi
+    ROUND(SUM(femmine_i + femmine_s) / SUM(totale_i + totale_s) * 100, 2) AS percentuale_femmine,
+    ROUND(SUM(maschi_i + maschi_s) / SUM(totale_i + totale_s) * 100, 2) AS percentuale_maschi
 FROM
     demo.residenti
 WHERE
