@@ -17,21 +17,25 @@ L’obiettivo di questa analisi è esaminare la distribuzione della popolazione 
 - `queries/` - Query SQL utilizzate
 - `report/` - Grafici
 
----------
-> da completare
-
-## Come Eseguire
-```sql
--- Eseguire le query nell'ordine:
--- 1. queries/setup.sql
--- 2. queries/analysis.sql
--- 3. queries/report.sql
-```
-
 ## Risultati Principali
-- [Insight 1]
-- [Insight 2]
-- [Insight 3]
+
+### Popolazione Residente in Italia
+
+* **Composizione:** Il 90% della popolazione residente è di nazionalità italiana, mentre il 10% è di nazionalità straniera.
+
+---
+
+### Distribuzione della Popolazione Italiana
+
+* **Età:** La maggior parte dei cittadini italiani appartiene alle generazioni **Gen X** e **Baby Boomer** (44-77 anni). I **Millennial** si collocano in una posizione intermedia, mentre le generazioni più giovani (0-28 anni) rappresentano il 25% del totale della popolazione italiana residente.
+* **Genere:** Nelle fasce di età più avanzate (oltre 98 anni), le **donne sono in netta maggioranza** (80%). La distribuzione si avvicina alla parità nella Gen X, per poi invertire la tendenza nelle generazioni più giovani (0-28 anni), dove le donne rappresentano il 48,5% e gli uomini il 51,5%.
+
+---
+
+### Distribuzione della Popolazione Straniera
+
+* **Età:** La generazione più popolosa tra gli stranieri residenti in Italia è quella dei **Millennial**.
+* **Genere:** Nelle fasce di età più giovani, i **maschi sono in maggioranza** (52,3% contro 47,7% di femmine). Nelle fasce di età più avanzate, la tendenza si inverte, con le **donne in maggioranza** (circa 64% contro 35% di uomini).
 
 ---
 **Autore**: Christopher Morello  
