@@ -1,2 +1,2 @@
-queries/queries01.sql linguist-language=SQL
-```
+*.sql linguist-language=SQL
+*.sql linguist-detectable=true
